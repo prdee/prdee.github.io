@@ -37,7 +37,7 @@
       --card-shadow: 0 4px 8px rgba(0,0,0,0.3);
       --card-radius: 8px;
       --card-padding: 1rem;
-      /* Fixed header/footer heights */
+      /* Fixed header/footer heights (for desktop) */
       --header-height: 100px;
       --footer-height: 60px;
     }
@@ -49,7 +49,7 @@
 
     html, body {
       height: 100%;
-      overflow: hidden; /* Prevent overall scrolling */
+      overflow: hidden; /* Prevent overall scrolling on desktop */
     }
 
     body {
@@ -83,10 +83,9 @@
       letter-spacing: 1px;
     }
 
-    /* MAIN CONTAINER: Two columns side by side */
+    /* MAIN CONTAINER: Two columns side by side (Desktop) */
     .main-container {
       width: 100%;
-      /* Height = remaining viewport after header and footer */
       height: calc(100vh - var(--header-height) - var(--footer-height));
       display: flex;
       flex-direction: row;
@@ -167,7 +166,7 @@
       background: var(--terminal-body-bg);
       padding: 1rem;
       flex: 1;
-      overflow-y: auto; /* Now scrollable when deploying content */
+      overflow-y: auto; /* Scrollable terminal */
     }
     .command-line {
       background: var(--terminal-body-bg);
@@ -253,7 +252,7 @@
       border: 1px solid #fff;
       border-radius: 6px;
       cursor: pointer;
-      text-decoration: none;  /* for <a> links */
+      text-decoration: none;
       transition: all 0.3s ease;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
@@ -267,6 +266,25 @@
     .bw-button:active {
       transform: scale(0.97);
       box-shadow: none;
+    }
+
+    /* RESPONSIVE STYLES FOR MOBILE */
+    @media (max-width: 768px) {
+      .main-container {
+        flex-direction: column;
+        height: auto;
+      }
+      .left-col, .right-col {
+        width: 100%;
+        margin: 10px 0;
+      }
+      header.hero-section {
+        height: auto;
+        padding: 2rem 1rem;
+      }
+      footer.ai-footer {
+        height: auto;
+      }
     }
   </style>
 </head>
@@ -320,6 +338,13 @@
           <li><strong>deploy</strong> - Show full resume</li>
           <li><strong>download</strong> - Download resume PDF</li>
           <li><strong>clear</strong> - Clear the terminal</li>
+          <li><strong>cd</strong> - Change directory</li>
+          <li><strong>ls</strong> - List directory contents</li>
+          <li><strong>pwd</strong> - Print working directory</li>
+          <li><strong>mkdir</strong> - Make directory</li>
+          <li><strong>touch</strong> - Create a file</li>
+          <li><strong>cat</strong> - Display file contents</li>
+          <li><strong>rm</strong> - Remove file</li>
         </ul>
       </div>
       <!-- Resume Download Card -->
@@ -441,9 +466,11 @@
       );
     }
 
+    // Command Handlers (including basic CMDs)
     const commandHandlers = {
       help: () => `
-Available commands:
+Available commands:<br>
+- <strong>help</strong>: Show all commands<br>
 - <strong>status</strong>: Show system status<br>
 - <strong>experience</strong>: Show work experience<br>
 - <strong>projects</strong>: Show projects<br>
@@ -453,7 +480,13 @@ Available commands:
 - <strong>deploy</strong>: Show full resume<br>
 - <strong>download</strong>: Download resume PDF<br>
 - <strong>clear</strong>: Clear the terminal<br>
-- <strong>help</strong>: Show available commands
+- <strong>cd</strong>: Change directory<br>
+- <strong>ls</strong>: List directory contents<br>
+- <strong>pwd</strong>: Print working directory<br>
+- <strong>mkdir</strong>: Make directory<br>
+- <strong>touch</strong>: Create a file<br>
+- <strong>cat</strong>: Display file contents<br>
+- <strong>rm</strong>: Remove file
       `,
       status: () => `
 <div class="fade-in">
@@ -472,7 +505,14 @@ Available commands:
       download: () => {
         generatePDF();
         return `<div class="fade-in"><p>Downloading Resume PDF...</p></div>`;
-      }
+      },
+      cd: (args) => `<div class="fade-in">Changed directory to ${args || '/home/pradeepG'}</div>`,
+      ls: () => `<div class="fade-in">Documents&nbsp;&nbsp;&nbsp;Downloads&nbsp;&nbsp;&nbsp;Desktop&nbsp;&nbsp;&nbsp;Projects</div>`,
+      pwd: () => `<div class="fade-in">/home/pradeepG</div>`,
+      mkdir: (args) => `<div class="fade-in">Directory "${args}" created.</div>`,
+      touch: (args) => `<div class="fade-in">File "${args}" created.</div>`,
+      cat: (args) => `<div class="fade-in">Contents of "${args}": Lorem ipsum dolor sit amet...</div>`,
+      rm: (args) => `<div class="fade-in">Removed "${args}".</div>`
     };
 
     const terminalOutput = document.getElementById('terminal-output');
@@ -486,6 +526,14 @@ Available commands:
       div.innerHTML = html;
       terminalOutput.appendChild(div);
       terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    }
+
+    // Basic command parser that splits command and arguments
+    function parseCommand(cmdString) {
+      const parts = cmdString.split(' ');
+      const cmd = parts.shift();
+      const args = parts.join(' ');
+      return { cmd, args };
     }
 
     function deployFullResumeAnimated() {
@@ -538,17 +586,18 @@ Available commands:
 
     commandInput.addEventListener('keypress', e => {
       if (e.key === 'Enter') {
-        const cmd = commandInput.value.trim().toLowerCase();
+        const fullCmd = commandInput.value.trim();
         commandInput.value = '';
-        appendToTerminal(`<span class="prompt">pradeepG ~ %</span> ${cmd}`);
+        appendToTerminal(`<span class="prompt">pradeepG ~ %</span> ${fullCmd}`);
+        const { cmd, args } = parseCommand(fullCmd.toLowerCase());
         if (cmd === 'clear') {
           terminalOutput.innerHTML = '';
         } else if (cmd === 'deploy') {
           deployFullResumeAnimated();
-        } else if (cmd.includes('download')) { // allow "download" to work even if extra words are typed
+        } else if (cmd === 'download') {
           commandHandlers.download();
         } else if (commandHandlers[cmd]) {
-          const output = commandHandlers[cmd]();
+          const output = commandHandlers[cmd](args);
           if (output) appendToTerminal(output);
         } else {
           appendToTerminal(`zsh: command not found: ${cmd}`);
