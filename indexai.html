@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI-Powered Terminal Portfolio</title>
+    <style>
+        :root {
+            --terminal-bg: #161b22;
+            --text-color: #e6edf3;
+            --prompt-color: #7ee787;
+            --highlight-color: #58a6ff;
+            --border-color: #30363d;
+            --command-color: #d2a8ff;
+            --svg-bg: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="3"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.1"/></svg>');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Mono', 'Courier New', monospace;
+            background: var(--terminal-bg);
+            color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .terminal-container {
+            flex: 1;
+            max-width: 100%;
+            margin: 0;
+            background: var(--terminal-bg) var(--svg-bg);
+            border-radius: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .terminal-header {
+            background: linear-gradient(90deg, #1a1f24 0%, #24292e 100%);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+
+        .dot:hover {
+            transform: scale(1.1);
+        }
+
+        .terminal-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        .terminal-input-container {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            border-top: 1px solid var(--border-color);
+            background: #1a1f24;
+        }
+
+        .terminal-input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 14px;
+            padding: 8px;
+            outline: none;
+            caret-color: var(--prompt-color);
+        }
+
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 12px 20px;
+            background: #1a1f24;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .command-suggestion {
+            color: var(--highlight-color);
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: rgba(88, 166, 255, 0.1);
+            transition: all 0.2s;
+        }
+
+        .command-suggestion:hover {
+            background: rgba(88, 166, 255, 0.2);
+        }
+
+        .response {
+            margin: 12px 0;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 3px solid var(--highlight-color);
+            border-radius: 4px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .loading-indicator {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--prompt-color);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .terminal-body {
+                padding: 15px;
+                font-size: 13px;
+            }
+
+            .terminal-input-container {
+                padding: 10px 15px;
+            }
+
+            .suggestions {
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-container">
+        <div class="terminal-header">
+            <div class="window-controls">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+            </div>
+            <div class="tab-title">pradeep@dev:~</div>
+        </div>
+        <div class="terminal-body" id="terminalBody">
+            <pre class="response">
+██████╗ ██████╗  █████╗ ██████╗ ███████╗███████╗██████╗ 
+██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔════╝██╔══██╗
+██████╔╝██████╔╝███████║██║  ██║█████╗  █████╗  ██████╔╝
+██╔═══╝ ██╔══██╗██╔══██║██║  ██║██╔══╝  ██╔══╝  ██╔═══╝ 
+██║     ██║  ██║██║  ██║██████╔╝███████╗███████╗██║     
+╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚══════╝╚═╝     
+            </pre>
+            <div class="response">
+                <p>Welcome to AI-powered developer terminal</p>
+                <p>Initializing Gemini Pro 1.5 Flash...</p>
+                <p>System ready. Type 'help' for commands</p>
+            </div>
+        </div>
+        <div class="terminal-input-container">
+            <span class="prompt">➜</span>
+            <input type="text" class="terminal-input" id="terminalInput" autofocus>
+            <div id="loading" class="loading-indicator" style="display: none;"></div>
+        </div>
+        <div class="suggestions" id="suggestions">
+            <span class="command-suggestion" data-command="about">about</span>
+            <span class="command-suggestion" data-command="experience">experience</span>
+            <span class="command-suggestion" data-command="projects">projects</span>
+            <span class="command-suggestion" data-command="skills">skills</span>
+            <span class="command-suggestion" data-command="contact">contact</span>
+            <span class="command-suggestion" data-command="clear">clear</span>
+        </div>
+    </div>
+
+    <script type="module">
+        import { GoogleGenerativeAI } from 'https://esm.run/@google/generative-ai';
+
+        const genAI = new GoogleGenerativeAI('YOUR_API_KEY');
+        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
+
+        const terminalBody = document.getElementById('terminalBody');
+        const terminalInput = document.getElementById('terminalInput');
+        const loadingIndicator = document.getElementById('loading');
+
+        async function getAIResponse(prompt) {
+            loadingIndicator.style.display = 'inline-block';
+            try {
+                const result = await model.generateContent(prompt);
+                const response = await result.response;
+                return response.text();
+            } catch (error) {
+                return `Error: ${error.message}`;
+            } finally {
+                loadingIndicator.style.display = 'none';
+            }
+        }
+
+        const commands = {
+            about: async () => {
+                const response = await getAIResponse(
+                    "Generate a professional about section for a backend developer named Pradeep G " +
+                    "with 3+ years experience in Node.js and cloud technologies. Keep it under 200 characters."
+                );
+                return `<div class="response">${response}</div>`;
+            },
+
+            experience: async () => {
+                const response = await getAIResponse(
+                    "Generate detailed work experience for a backend developer with points about: " +
+                    "- Microservices architecture - Cloud optimization - Team collaboration - Technical achievements"
+                );
+                return `<div class="response">${response}</div>`;
+            },
+
+            projects: async () => {
+                const response = await getAIResponse(
+                    "Generate 3 technical projects for a backend developer with: " +
+                    "- Project name - Key technologies - Technical challenges - Business impact " +
+                    "Format as markdown bullets"
+                );
+                return `<div class="response">${response}</div>`;
+            },
+
+            skills: async () => {
+                const response = await getAIResponse(
+                    "List technical skills for a backend developer in categories: " +
+                    "Languages, Frameworks, Databases, Cloud Services, Tools. Use emojis"
+                );
+                return `<div class="response">${response}</div>`;
+            },
+
+            contact: () => {
+                return `<div class="response">
+                    <p>📧 Email: pradeeg6@gmail.com</p>
+                    <p>📱 LinkedIn: linkedin.com/in/pradeep-g</p>
+                    <p>💻 GitHub: github.com/pradeep-g</p>
+                </div>`;
+            },
+
+            clear: () => {
+                terminalBody.innerHTML = '';
+                return '';
+            }
+        };
+
+        terminalInput.addEventListener('keydown', async (e) => {
+            if (e.key === 'Enter') {
+                const command = terminalInput.value.trim().toLowerCase();
+                terminalInput.value = '';
+                
+                if (!command) return;
+
+                // Add input to history
+                terminalBody.innerHTML += `
+                    <div class="response">
+                        <span style="color: ${getComputedStyle(document.documentElement).getPropertyValue('--prompt-color')}">➜</span>
+                        ${command}
+                    </div>`;
+
+                // Process command
+                if (commands[command]) {
+                    const response = await commands[command]();
+                    terminalBody.insertAdjacentHTML('beforeend', response);
+                } else {
+                    terminalBody.innerHTML += `
+                        <div class="response">
+                            ❌ Command not found. Available commands: 
+                            ${Object.keys(commands).join(', ')}
+                        </div>`;
+                }
+
+                // Auto-scroll
+                terminalBody.scrollTop = terminalBody.scrollHeight;
+            }
+        });
+
+        // Command suggestions
+        document.querySelectorAll('.command-suggestion').forEach(button => {
+            button.addEventListener('click', () => {
+                terminalInput.value = button.dataset.command;
+                terminalInput.focus();
+            });
+        });
+
+        // Mobile-friendly tap events
+        terminalInput.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            terminalInput.focus();
+        });
+    </script>
+</body>
+</html>

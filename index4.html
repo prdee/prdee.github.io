@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pradeep G - DevOps & Backend Engineer</title>
+    <style>
+        :root {
+            --terminal-bg: #0a0e14;
+            --neon-green: #7dfa8d;
+            --electric-blue: #58a6ff;
+            --cyber-purple: #d2a8ff;
+            --matrix-green: #00ff41;
+            --warning-orange: #ffa500;
+            --error-red: #ff5f56;
+        }
+
+        body {
+            margin: 0;
+            background: radial-gradient(circle at center, #001320, #00070d);
+            color: #c9d1d9;
+            font-family: 'SF Mono', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .cyber-border {
+            position: fixed;
+            pointer-events: none;
+            border: 2px solid var(--matrix-green);
+            box-shadow: 0 0 15px var(--matrix-green);
+            animation: borderGlow 2s infinite;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: linear-gradient(45deg, #001320aa, #00070daa);
+            border-bottom: 2px solid var(--electric-blue);
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            background: linear-gradient(45deg, var(--neon-green), var(--electric-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px var(--electric-blue);
+            margin: 1rem 0;
+        }
+
+        .hero-subtitle {
+            color: var(--cyber-purple);
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        .terminal-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: var(--terminal-bg);
+            border-radius: 8px;
+            box-shadow: 0 0 30px #001320;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background: #00070d;
+            padding: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .window-controls .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .terminal-body {
+            padding: 1.5rem;
+            min-height: 400px;
+            position: relative;
+        }
+
+        .hud-element {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            background: #00070d;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            border: 1px solid var(--electric-blue);
+            box-shadow: 0 0 10px var(--electric-blue);
+        }
+
+        .command-line {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: #00070d;
+            border-top: 1px solid #30363d;
+        }
+
+        .prompt {
+            color: var(--neon-green);
+            margin-right: 0.5rem;
+            white-space: nowrap;
+        }
+
+        #commandInput {
+            flex: 1;
+            background: none;
+            border: none;
+            color: var(--neon-green);
+            font-family: inherit;
+            font-size: 1rem;
+            padding: 0.3rem;
+        }
+
+        .cyber-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .cyber-list li {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            background: #001320;
+            border-left: 3px solid var(--electric-blue);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .cyber-list li:hover {
+            transform: translateX(10px);
+            box-shadow: 3px 0 15px var(--electric-blue);
+        }
+
+        .server-status {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #001320;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--neon-green);
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.3; }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .typewriter {
+            border-right: 2px solid var(--neon-green);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        .kubernetes-cluster {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+            background: #00070d;
+            border: 1px solid var(--electric-blue);
+            margin: 1rem 0;
+        }
+
+        .node {
+            padding: 1rem;
+            background: #001320;
+            text-align: center;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .node:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--electric-blue);
+        }
+
+        /* New styles for resume sections */
+        .experience-item, .project-item, .education-item {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #001320;
+            border-left: 3px solid var(--electric-blue);
+        }
+
+        .experience-item h3, .project-item h3, .education-item h3 {
+            color: var(--neon-green);
+        }
+
+        .experience-item p, .project-item p, .education-item p {
+            color: var(--cyber-purple);
+        }
+
+        /* Commands Section */
+        .commands-section {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: #00070d;
+            border: 1px solid var(--electric-blue);
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 0 30px #001320;
+        }
+        .commands-section h2 {
+            color: var(--neon-green);
+        }
+        .commands-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .commands-section li {
+            margin: 0.5rem 0;
+            color: var(--cyber-purple);
+        }
+
+        /* Resume Download Section */
+        .resume-download {
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+        .resume-download a {
+            color: var(--neon-green);
+            text-decoration: none;
+            font-size: 1.2rem;
+            border: 1px solid var(--electric-blue);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            background: #00070d;
+            transition: 0.3s;
+        }
+        .resume-download a:hover {
+            box-shadow: 0 0 10px var(--electric-blue);
+        }
+
+        /* Static Contact Section */
+        .contact-section {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: #00070d;
+            border: 1px solid var(--electric-blue);
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 0 30px #001320;
+        }
+        .contact-section h2 {
+            color: var(--neon-green);
+            margin-bottom: 1rem;
+        }
+        .contact-section p a {
+            color: var(--cyber-purple);
+            text-decoration: none;
+        }
+        .contact-section p a:hover {
+            text-decoration: underline;
+        }
+
+        /* Deploy Button styling */
+        .deploy-button {
+            margin-top: 1rem;
+            display: inline-block;
+            background: #00070d;
+            color: var(--neon-green);
+            border: 1px solid var(--electric-blue);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .deploy-button:hover {
+            box-shadow: 0 0 10px var(--electric-blue);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="cyber-border"></div>
+    <div class="particles"></div>
+
+    <section class="hero-section">
+        <h1 class="hero-title">PRADEEP G</h1>
+        <p class="hero-subtitle">
+            <span class="typewriter">Software Develpoment Engineer</span>
+        </p>
+    </section>
+
+    <div class="terminal-container">
+        <div class="terminal-header">
+            <div class="window-controls">
+                <span class="dot" style="background: var(--error-red)"></span>
+                <span class="dot" style="background: var(--warning-orange)"></span>
+                <span class="dot" style="background: var(--neon-green)"></span>
+            </div>
+            <div class="hud-element">
+                region: ap-south-1(Hyderabad) | K8s: Active | Experience: 3+
+            </div>
+        </div>
+
+        <div class="terminal-body">
+            <div id="terminal-output"></div>
+        </div>
+
+        <div class="command-line">
+            <span class="prompt">root@production:~#</span>
+            <input type="text" id="commandInput" placeholder="deploy --stack fullsystem" autofocus>
+        </div>
+    </div>
+
+    <!-- Section listing available commands -->
+    <section class="commands-section">
+        <h2>Available Commands</h2>
+        <ul>
+            <li><strong>help</strong> - Show all commands</li>
+            <li><strong>status</strong> - Show system status</li>
+            <li><strong>experience</strong> - Show work experience</li>
+            <li><strong>projects</strong> - Show projects</li>
+            <li><strong>skills</strong> - Show skills & achievements</li>
+            <li><strong>education</strong> - Show education</li>
+            <li><strong>contact</strong> - Show contact details</li>
+            <li><strong>deploy</strong> - Show entire resume</li>
+            <li><strong>clear</strong> - Clear the terminal</li>
+        </ul>
+
+        <!-- Deploy Full Resume Button -->
+        <button id="deployBtn" class="deploy-button">Deploy Full Resume</button>
+    </section>
+
+    <!-- Section to download resume -->
+    <section class="resume-download">
+        <h2>Download My Resume</h2>
+        <!-- Replace 'PradeepG_Resume.pdf' with your actual PDF filename or link -->
+        <a href="PradeepG_Resume.pdf" download>Download PDF</a>
+    </section>
+
+    <!-- Static contact section (if you want it visible at all times) -->
+    <section class="contact-section">
+        <h2>Get in Touch</h2>
+        <p>Phone: +91-7829496877</p>
+        <p>Email: <a href="mailto:pradeeg6@gmail.com">pradeeg6@gmail.com</a></p>
+        <p>LinkedIn: <a href="https://linkedin.com/in/pradeep-g" target="_blank">https://www.linkedin.com/in/pradeepg04/</a></p>
+        <p>GitHub: <a href="https://github.com/pradeep-g" target="_blank">https://github.com/prdee</a></p>
+    </section>
+
+    <script>
+        // Particle animation
+        class Particle {
+            constructor() {
+                this.x = Math.random() * window.innerWidth;
+                this.y = Math.random() * window.innerHeight;
+                this.size = Math.random() * 2;
+                this.speedX = Math.random() * 3 - 1.5;
+                this.speedY = Math.random() * 3 - 1.5;
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                if (this.x > window.innerWidth || this.x < 0) this.speedX *= -1;
+                if (this.y > window.innerHeight || this.y < 0) this.speedY *= -1;
+            }
+            
+            draw(ctx) {
+                ctx.fillStyle = 'rgba(93, 255, 147, 0.2)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Initialize particles
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.classList.add('particles');
+        document.body.appendChild(canvas);
+        
+        const particles = Array(50).fill().map(() => new Particle());
+        
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw(ctx);
+            });
+            
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // Terminal interactions
+        const terminalOutput = document.getElementById('terminal-output');
+        const commandInput = document.getElementById('commandInput');
+        const deployBtn = document.getElementById('deployBtn');
+
+        const resumeData = {
+            experience: `
+<h2>Experience</h2>
+<div class="experience-item">
+    <h3>Software Development Engineer - VARSTY EDUCATION MANAGEMENT (Infinity Learn)</h3>
+    <p>Jan 2022 - Present | Hyderabad, India</p>
+    <ul class="cyber-list">
+        <li>Developed and built a scalable live class service, COMMS Service, Learn service and CRON service platforms with NestJS, Express Js and AWS Services, supporting 10K+ concurrent users with 99.9% uptime</li>
+        <li>Enhanced system reliability through NewRelic monitoring, achieving a 75% reduction in downtime and 60% faster incident resolution</li>
+        <li>Optimized database performance using MongoDB query optimization and Redis caching strategies, resulting in 40% faster response times</li>
+        <li>Collaborated with a team of 4 engineers, implementing agile practices and code reviews, delivering 4 major projects with 30% improved performance</li>
+    </ul>
+</div>
+<div class="experience-item">
+    <h3>Software Consultant - SMART-GIG TECHNOLOGIES</h3>
+    <p>Oct 2021 - Dec 2022 | Hyderabad, India</p>
+    <ul class="cyber-list">
+        <li>Spearheaded development of microservices architecture using Node.js and Fast API, implementing event-driven design patterns that processed 1M+ daily transactions</li>
+        <li>Optimized backend architecture for the live education platform through innovative use of AWS services alongside MongoDB caching strategies; directly reduced server response times from an average of five seconds to under one second per request</li>
+        <li>Developed a real-time data synchronization system with WebSocket and Redis pub/sub, reducing data latency by 60% across distributed services</li>
+    </ul>
+</div>
+`,
+            projects: `
+<h2>Projects</h2>
+<div class="project-item">
+    <h3>AI Mentor</h3>
+    <p>Technologies: Express.js, AWS Lambda, OpenAI API (Gemini AI, Claude AI), Firebase, ReactJS</p>
+    <ul class="cyber-list">
+        <li>Created an intelligent learning platform leveraging AWS Lambda and OpenAI API (Gemini AI, Claude AI), achieving a 30% reduction in operational costs through enhanced automation and streamlined workflows across the customer support operations</li>
+        <li>Integrated real-time collaborative learning features through Firebase WebSocket system, supporting 10K+ concurrent sessions with sub-second latency</li>
+    </ul>
+</div>
+<div class="project-item">
+    <h3>Infinity Learn Backend</h3>
+    <p>Technologies: NestJS, Express JS, Angular Js, React Js, AWS, GCP</p>
+    <ul class="cyber-list">
+        <li>Designed hybrid cloud infrastructure using AWS ECS and GCP Cloud Run, reducing operational costs by 30% while maintaining 99.99% uptime</li>
+        <li>Integrated Agora and Zoom SDKs within a unified video streaming service, facilitating more than 5K simultaneous users; achieved a significant reduction in setup time by nearly half for rapid deployment across teams</li>
+        <li>Deployed auto-scaling and load balancing across multiple cloud providers, ensuring consistent performance during 3x traffic surges</li>
+    </ul>
+</div>
+<div class="project-item">
+    <h3>TDW - Taste Don't Waste</h3>
+    <p>Technologies: NestJS, AWS, Machine Learning</p>
+    <ul class="cyber-list">
+        <li>Created a machine learning-based food waste prediction system with AWS SageMaker, achieving 90% accuracy in forecasting expiration dates for 1M+ daily predictions</li>
+        <li>Implemented scalable event-driven architecture using AWS Services, handling 5x traffic increases with zero performance degradation</li>
+    </ul>
+</div>
+`,
+            skills: `
+<h2>Skills & Achievements</h2>
+<ul class="cyber-list">
+    <li><strong>Programming:</strong> JavaScript (ES6+), TypeScript, Python</li>
+    <li><strong>Frameworks & Tools:</strong> Nest JS, Express Js, Redis, Docker, Kubernetes, FastAPI, React Js, Angular Js, JIRA, Git</li>
+    <li><strong>Cloud & Database:</strong> AWS (Lambda, S3), GCP (Cloud Run, Cloud Functions), MongoDB, PostgreSQL</li>
+    <li><strong>Awards:</strong> Employee of the Year 2022 (Smart Gig), Bug Buster Award 2023 (Infinity Learn)</li>
+    <li><strong>Certifications:</strong> Google Cloud Infrastructure for AWS Professionals, Full Stack Web Development</li>
+</ul>
+`,
+            education: `
+<h2>Education</h2>
+<div class="education-item">
+    <h3>Bachelor in Computer Application</h3>
+    <p>VSKUB University, 2020</p>
+</div>
+`,
+            contact: `
+<h2>Contact Information</h2>
+<ul class="cyber-list">
+    <li>Phone: +91-7829496877</li>
+    <li>Email: pradeeg6@gmail.com</li>
+    <li>LinkedIn: <a href="https://linkedin.com/in/pradeep-g" target="_blank">linkedin.com/in/pradeep-g</a></li>
+    <li>GitHub: <a href="https://github.com/pradeep-g" target="_blank">github.com/pradeep-g</a></li>
+</ul>
+`
+        };
+
+        // Merge all resume sections for the 'deploy' command
+        function getFullResume() {
+            return (
+                resumeData.experience +
+                resumeData.projects +
+                resumeData.skills +
+                resumeData.education +
+                resumeData.contact
+            );
+        }
+
+        const commandHandlers = {
+            help: () => `
+Available commands:
+- <strong>status</strong>: Show system status
+- <strong>experience</strong>: Show work experience
+- <strong>projects</strong>: Show projects
+- <strong>skills</strong>: Show skills & achievements
+- <strong>education</strong>: Show education
+- <strong>contact</strong>: Show contact information
+- <strong>deploy</strong>: Show entire resume
+- <strong>clear</strong>: Clear the terminal
+- <strong>help</strong>: Show this message
+`,
+            status: () => `
+<div class="server-status">
+    <div class="status-indicator"></div>
+    <span>Production Cluster: Operational</span>
+</div>
+<div class="kubernetes-cluster">
+    <div class="node">Control Plane</div>
+    <div class="node">Worker Node-1</div>
+    <div class="node">Worker Node-2</div>
+    <div class="node">DB Shard</div>
+</div>
+<ul class="cyber-list">
+    <li>🚀 3+ years building scalable backend systems</li>
+    <li>🔧 Kubernetes Certified Administrator (CKA)</li>
+    <li>☁️ AWS Solutions Architect - Professional</li>
+    <li>📈 Optimized infrastructure costs by 40%+</li>
+</ul>
+`,
+            experience: () => resumeData.experience,
+            projects: () => resumeData.projects,
+            skills: () => resumeData.skills,
+            education: () => resumeData.education,
+            contact: () => resumeData.contact,
+            deploy: () => getFullResume(),
+            clear: () => {
+                terminalOutput.innerHTML = '';
+                return '';
+            }
+        };
+
+        function appendToTerminal(content) {
+            const div = document.createElement('div');
+            div.innerHTML = content;
+            terminalOutput.appendChild(div);
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }
+
+        // Initial terminal greeting
+        document.addEventListener('DOMContentLoaded', () => {
+            appendToTerminal("Welcome to Pradeep G's Terminal Portfolio");
+            appendToTerminal("Type 'help' to see available commands");
+        });
+
+        // Handle user-typed commands
+        commandInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const command = commandInput.value.trim().toLowerCase();
+                commandInput.value = '';
+                appendToTerminal(`<span class="prompt">root@production:~#</span> ${command}`);
+
+                if (commandHandlers[command]) {
+                    const output = commandHandlers[command]();
+                    if (output) {
+                        appendToTerminal(output);
+                    }
+                } else {
+                    appendToTerminal(`Command not found: ${command}`);
+                }
+                commandInput.focus();
+            }
+        });
+
+        // Handle "Deploy Full Resume" button
+        deployBtn.addEventListener('click', () => {
+            // Simulate user typing "deploy --stack fullsystem" in the terminal
+            appendToTerminal(`<span class="prompt">root@production:~#</span> deploy --stack fullsystem`);
+            
+            const output = commandHandlers.deploy();
+            if (output) {
+                appendToTerminal(output);
+            }
+        });
+    </script>
+</body>
+</html>
