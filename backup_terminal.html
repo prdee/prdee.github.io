@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pradeep G - DevOps & Backend Engineer</title>
+  
+  <!-- Include html2canvas library for PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- Include jsPDF library for PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  
+  <style>
+    /* GLOBALS & THEMING */
+    :root {
+      /* Background gradient for entire page */
+      --page-bg-gradient: linear-gradient(135deg, #2b2b2b 0%, #1e1e1e 100%);
+      /* Terminal bar */
+      --terminal-bar-bg: #2c2c2c;
+      /* Terminal body background */
+      --terminal-body-bg: #0f0f0f;
+      /* Text color & glow */
+      --text-color: #ccc;
+      --text-glow: rgba(255, 255, 255, 0.15);
+      --highlight-color: #4cd137;
+      /* Window controls (Mac traffic lights) */
+      --dot-red: #ff5f57;
+      --dot-yellow: #ffbd2e;
+      --dot-green: #28c840;
+      /* Borders */
+      --border-color: #444;
+      /* Fonts */
+      --mono-font: 'SF Mono', Menlo, Monaco, 'Courier New', monospace;
+      /* Card styling for right column sections */
+      --card-bg: #1a1a1a;
+      --card-border: 1px solid #333;
+      --card-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      --card-radius: 8px;
+      --card-padding: 1rem;
+      /* Fixed header/footer heights (for desktop) */
+      --header-height: 100px;
+      --footer-height: 60px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background: var(--page-bg-gradient);
+      color: var(--text-color);
+      font-family: var(--mono-font);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* HEADER (Hero Section) */
+    header.hero-section {
+      height: var(--header-height);
+      width: 100%;
+      padding: 1rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: transparent;
+    }
+    .hero-title {
+      font-size: 2.5rem;
+      color: #fff;
+      margin-bottom: 0.3rem;
+    }
+    .hero-subtitle {
+      font-size: 1.3rem;
+      color: var(--text-color);
+      letter-spacing: 1px;
+    }
+
+    /* MAIN CONTAINER: Two columns side by side (Desktop) */
+    .main-container {
+      width: 100%;
+      height: calc(100vh - var(--header-height) - var(--footer-height));
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0 1rem;
+      overflow-y: auto; /* Allow scrolling in the main container */
+    }
+    .left-col, .right-col {
+      flex: 1;
+      margin: 0 10px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* TERMINAL CONTAINER (fills left column) */
+    .terminal-container {
+      width: 100%;
+      height: 100%;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+    }
+    .terminal-bar {
+      background: var(--terminal-bar-bg);
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .window-controls {
+      display: flex;
+      gap: 8px;
+      margin-right: 1rem;
+    }
+    .dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+    }
+    .dot.red { background: var(--dot-red); }
+    .dot.yellow { background: var(--dot-yellow); }
+    .dot.green { background: var(--dot-green); }
+    .tab-bar {
+      display: flex;
+      align-items: center;
+      height: 24px;
+      border-bottom: 1px solid var(--border-color);
+      margin-left: 0.5rem;
+    }
+    .tab {
+      padding: 0 1rem;
+      line-height: 24px;
+      color: #fff;
+      background: #3c3c3c;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+      margin-right: 2px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .tab.active {
+      background: #4c4c4c;
+      font-weight: bold;
+    }
+    .terminal-title {
+      margin-left: 1rem;
+      color: #888;
+      font-size: 0.8rem;
+      line-height: 24px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .terminal-body {
+      background: var(--terminal-body-bg);
+      padding: 1rem;
+      flex: 1;
+      overflow-y: auto; /* Scrollable terminal */
+    }
+    .command-line {
+      background: var(--terminal-body-bg);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+    }
+    .prompt {
+      color: var(--highlight-color);
+      margin-right: 0.5rem;
+      white-space: nowrap;
+      text-shadow: 0 0 4px var(--text-glow);
+    }
+    #commandInput {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--text-color);
+      font-size: 1rem;
+      width: 100%;
+    }
+
+    /* RIGHT COLUMN CARDS */
+    .card {
+      width: 100%;
+      background: var(--card-bg);
+      border: var(--card-border);
+      border-radius: var(--card-radius);
+      padding: var(--card-padding);
+      box-shadow: var(--card-shadow);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .card h2 {
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+    .card p, .card ul {
+      color: var(--text-color);
+      font-size: 0.9rem;
+    }
+    .card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      text-align: left;
+    }
+    .card ul li {
+      margin: 0.3rem 0;
+    }
+    .cheat-sheet, .resume-download, .contact {
+      flex: 1;
+    }
+    .right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    /* FOOTER */
+    footer.ai-footer {
+      height: var(--footer-height);
+      width: 100%;
+      padding: 1rem;
+      color: var(--text-color);
+      font-family: var(--mono-font);
+      text-align: center;
+      background: transparent;
+    }
+
+    /* Black-and-White Styled Buttons */
+    .bw-button {
+      display: inline-block;
+      background: #000;
+      color: #fff;
+      font-family: 'SF Mono', Menlo, monospace;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 10px 18px;
+      border: 1px solid #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      margin: 0.5rem 0;
+      width: 100%;
+      max-width: 250px;
+    }
+    .bw-button:hover {
+      background: #fff;
+      color: #000;
+      border: 1px solid #000;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+      transform: translateY(-2px);
+    }
+    .bw-button:active {
+      transform: scale(0.97);
+      box-shadow: none;
+    }
+    
+    /* Add fade-in animation */
+    .fade-in {
+      animation: fadeIn 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* RESPONSIVE STYLES FOR MOBILE */
+    @media (max-width: 768px) {
+      body {
+        overflow-y: auto; /* Enable scrolling on mobile */
+        height: auto;
+      }
+      
+      .main-container {
+        flex-direction: column;
+        height: auto;
+        padding: 1rem;
+        overflow-y: visible;
+      }
+      
+      .left-col, .right-col {
+        width: 100%;
+        height: auto;
+        margin: 1rem 0;
+        flex: none;
+      }
+      
+      .terminal-container {
+        height: 70vh; /* Fixed height on mobile */
+        min-height: 400px;
+      }
+      
+      header.hero-section {
+        height: auto;
+        padding: 2rem 1rem;
+      }
+      
+      .hero-title {
+        font-size: 2rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+      
+      .terminal-bar {
+        padding: 0.5rem;
+      }
+      
+      .terminal-title {
+        font-size: 0.7rem;
+        max-width: 150px;
+      }
+      
+      .card {
+        margin-bottom: 1rem;
+      }
+      
+      .card h2 {
+        font-size: 1.2rem;
+      }
+      
+      .right-col {
+        max-width: 100%;
+      }
+      
+      footer.ai-footer {
+        height: auto;
+        padding: 1rem;
+        margin-top: 1rem;
+      }
+      
+      .bw-button {
+        width: 100%;
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+    }
+    
+    /* Extra small devices */
+    @media (max-width: 480px) {
+      .terminal-title {
+        display: none; /* Hide on very small screens */
+      }
+      
+      .window-controls {
+        margin-right: 0.5rem;
+      }
+      
+      .dot {
+        width: 10px;
+        height: 10px;
+      }
+      
+      .prompt {
+        font-size: 0.8rem;
+      }
+      
+      #commandInput {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER / HERO -->
+  <header class="hero-section">
+    <h1 class="hero-title">PRADEEP G</h1>
+    <p class="hero-subtitle">Software Development Engineer</p>
+  </header>
+
+  <!-- MAIN CONTAINER: Two columns -->
+  <div class="main-container">
+    <!-- Left Column: Terminal -->
+    <div class="left-col">
+      <div class="terminal-container">
+        <div class="terminal-bar">
+          <div class="window-controls">
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green"></div>
+          </div>
+          <div class="tab-bar">
+            <div class="tab active">pradeepG</div>
+          </div>
+          <div class="terminal-title">
+            region: ap-south-1(Hyderabad) | K8s: Active | Experience: 3+ | 80x24
+          </div>
+        </div>
+        <div class="terminal-body" id="terminal-output"></div>
+        <div class="command-line">
+          <span class="prompt">pradeepG ~ %</span>
+          <input type="text" id="commandInput" placeholder="Type a command..." autofocus />
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right Column: Cards -->
+    <div class="right-col">
+      <!-- Cheat Sheet Card -->
+      <div class="card cheat-sheet">
+        <h2>Cheat Sheet</h2>
+        <ul>
+          <li><strong>help</strong> - Show all commands</li>
+          <li><strong>status</strong> - Show system status</li>
+          <li><strong>experience</strong> - Show work experience</li>
+          <li><strong>projects</strong> - Show projects</li>
+          <li><strong>skills</strong> - Show skills &amp; achievements</li>
+          <li><strong>education</strong> - Show education</li>
+          <li><strong>contact</strong> - Show contact details</li>
+          <li><strong>deploy</strong> - Show full resume</li>
+          <li><strong>download</strong> - Download resume PDF</li>
+          <li><strong>clear</strong> - Clear the terminal</li>
+        </ul>
+      </div>
+      <!-- Resume Download Card -->
+      <div class="card resume-download">
+        <h2>Download My Resume</h2>
+        <p>(Single Page Format)</p>
+        <a id="pdfDownloadBtn" class="bw-button" href="#" download>Download Resume PDF</a>
+        <button id="deployBtn" class="bw-button">Deploy Full Resume</button>
+        <p>For best viewing, download the resume to see the complete format.</p>
+      </div>
+      <!-- Contact Card -->
+      <div class="card contact">
+        <h2>Get in Touch</h2>
+        <ul>
+          <li>Phone: +91-7829496877</li>
+          <li>Email: <a href="mailto:pradeeg6@gmail.com">pradeeg6@gmail.com</a></li>
+          <li>LinkedIn: <a href="https://linkedin.com/in/pradeepg04" target="_blank">linkedin.com/in/pradeepg04</a></li>
+          <li>GitHub: <a href="https://github.com/prdee" target="_blank">github.com/prdee</a></li>
+        </ul>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="ai-footer">
+    <p>Generated by AI</p>
+  </footer>
+
+  <!-- Hidden container for PDF generation -->
+  <div id="pdf-content" style="display: none;"></div>
+
+  <script>
+    // Resume Data
+    const resumeData = {
+      experience: `
+<h2>Experience</h2>
+<div>
+  <h3>Software Development Engineer - VARSTY EDUCATION MANAGEMENT (Infinity Learn)</h3>
+  <p>Jan 2022 - Present | Hyderabad, India</p>
+  <ul class="cyber-list">
+    <li>Developed scalable live class, COMMS, Learn, and CRON service platforms with NestJS, Express, and AWS supporting 10K+ users.</li>
+    <li>Reduced downtime by 75% using NewRelic monitoring and improved incident resolution by 60%.</li>
+    <li>Optimized database performance with MongoDB tuning and Redis caching achieving 40% faster responses.</li>
+    <li>Collaborated with a 4-member team using agile practices to deliver 4 major projects with 30% performance improvement.</li>
+  </ul>
+</div>
+<div>
+  <h3>Software Consultant - SMART-GIG TECHNOLOGIES</h3>
+  <p>Oct 2021 - Dec 2022 | Hyderabad, India</p>
+  <ul class="cyber-list">
+    <li>Led microservices architecture development with Node.js and FastAPI processing 1M+ daily transactions.</li>
+    <li>Optimized backend using AWS and MongoDB caching, significantly reducing response times.</li>
+    <li>Built a real-time data sync system with WebSocket and Redis pub/sub reducing latency by 60%.</li>
+  </ul>
+</div>
+      `,
+      projects: `
+<h2>Projects</h2>
+<div>
+  <h3>AI Mentor</h3>
+  <p>Technologies: Express.js, AWS Lambda, OpenAI API, Firebase, ReactJS</p>
+  <ul class="cyber-list">
+    <li>Developed an intelligent learning platform reducing operational costs by 30% via automation.</li>
+    <li>Integrated real-time collaboration using Firebase WebSocket supporting 10K+ concurrent sessions.</li>
+  </ul>
+</div>
+<div>
+  <h3>Infinity Learn Backend</h3>
+  <p>Technologies: NestJS, Express, Angular, React, AWS, GCP</p>
+  <ul class="cyber-list">
+    <li>Designed hybrid cloud infrastructure using AWS ECS and GCP Cloud Run reducing costs by 30% while maintaining 99.99% uptime.</li>
+    <li>Integrated Agora and Zoom SDKs for video streaming enabling 5K+ simultaneous users.</li>
+    <li>Implemented auto-scaling and load balancing ensuring consistent performance during traffic surges.</li>
+  </ul>
+</div>
+<div>
+  <h3>TDW - Taste Don't Waste</h3>
+  <p>Technologies: NestJS, AWS, Machine Learning</p>
+  <ul class="cyber-list">
+    <li>Built an ML-based food waste prediction system using AWS SageMaker with 90% accuracy on 1M+ daily predictions.</li>
+    <li>Implemented an event-driven architecture to handle 5x traffic increases with zero performance drop.</li>
+  </ul>
+</div>
+      `,
+      skills: `
+<h2>Skills & Achievements</h2>
+<ul class="cyber-list">
+  <li><strong>Programming:</strong> JavaScript (ES6+), TypeScript, Python</li>
+  <li><strong>Frameworks & Tools:</strong> NestJS, Express, Redis, Docker, Kubernetes, FastAPI, React, Angular, JIRA, Git</li>
+  <li><strong>Cloud & Database:</strong> AWS, GCP, MongoDB, PostgreSQL</li>
+  <li><strong>Awards:</strong> Employee of the Year 2022, Bug Buster Award 2023</li>
+  <li><strong>Certifications:</strong> Google Cloud Infrastructure for AWS Professionals, Full Stack Web Development</li>
+</ul>
+      `,
+      education: `
+<h2>Education</h2>
+<div>
+  <h3>Bachelor in Computer Application</h3>
+  <p>VSKUB University, 2020</p>
+</div>
+      `,
+      contact: `
+<h2>Contact Information</h2>
+<ul class="cyber-list">
+  <li>Phone: +91-7829496877</li>
+  <li>Email: pradeeg6@gmail.com</li>
+  <li>LinkedIn: linkedin.com/in/pradeepg04</li>
+  <li>GitHub: github.com/prdee</li>
+</ul>
+      `
+    };
+
+    function getFullResume() {
+      return (
+        resumeData.experience +
+        resumeData.projects +
+        resumeData.skills +
+        resumeData.education +
+        resumeData.contact
+      );
+    }
+
+    // Command Handlers (including basic CMDs)
+    const commandHandlers = {
+      help: () => `
+Available commands:<br>
+- <strong>help</strong>: Show all commands<br>
+- <strong>status</strong>: Show system status<br>
+- <strong>experience</strong>: Show work experience<br>
+- <strong>projects</strong>: Show projects<br>
+- <strong>skills</strong>: Show skills &amp; achievements<br>
+- <strong>education</strong>: Show education<br>
+- <strong>contact</strong>: Show contact information<br>
+- <strong>deploy</strong>: Show full resume<br>
+- <strong>download</strong>: Download resume PDF<br>
+- <strong>clear</strong>: Clear the terminal<br>
+- <strong>cd</strong>: Change directory<br>
+- <strong>ls</strong>: List directory contents<br>
+- <strong>pwd</strong>: Print working directory<br>
+- <strong>mkdir</strong>: Make directory<br>
+- <strong>touch</strong>: Create a file<br>
+- <strong>cat</strong>: Display file contents<br>
+- <strong>rm</strong>: Remove file
+      `,
+      status: () => `
+<div class="fade-in">
+  <p>Production Cluster: Operational</p>
+  <p>3+ years building scalable backend systems</p>
+  <p>Kubernetes Certified Administrator (CKA)</p>
+  <p>AWS Solutions Architect - Professional</p>
+</div>
+      `,
+      experience: () => resumeData.experience,
+      projects: () => resumeData.projects,
+      skills: () => resumeData.skills,
+      education: () => resumeData.education,
+      contact: () => resumeData.contact,
+      deploy: () => getFullResume(),
+      download: () => {
+        generatePDF();
+        return `<div class="fade-in"><p>Downloading Resume PDF...</p></div>`;
+      },
+      cd: (args) => `<div class="fade-in">Changed directory to ${args || '/home/pradeepG'}</div>`,
+      ls: () => `<div class="fade-in">Documents&nbsp;&nbsp;&nbsp;Downloads&nbsp;&nbsp;&nbsp;Desktop&nbsp;&nbsp;&nbsp;Projects</div>`,
+      pwd: () => `<div class="fade-in">/home/pradeepG</div>`,
+      mkdir: (args) => `<div class="fade-in">Directory "${args}" created.</div>`,
+      touch: (args) => `<div class="fade-in">File "${args}" created.</div>`,
+      cat: (args) => `<div class="fade-in">Contents of "${args}": Lorem ipsum dolor sit amet...</div>`,
+      rm: (args) => `<div class="fade-in">Removed "${args}".</div>`
+    };
+
+    const terminalOutput = document.getElementById('terminal-output');
+    const commandInput = document.getElementById('commandInput');
+    const deployBtn = document.getElementById('deployBtn');
+    const pdfDownloadBtn = document.getElementById('pdfDownloadBtn');
+
+    function appendToTerminal(html) {
+      const div = document.createElement('div');
+      div.classList.add('fade-in');
+      div.innerHTML = html;
+      terminalOutput.appendChild(div);
+      terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    }
+
+    // Basic command parser that splits command and arguments
+    function parseCommand(cmdString) {
+      const parts = cmdString.split(' ');
+      const cmd = parts.shift();
+      const args = parts.join(' ');
+      return { cmd, args };
+    }
+
+    function deployFullResumeAnimated() {
+      let countdown = 5;
+      const line = document.createElement('div');
+      line.classList.add('fade-in');
+      line.innerHTML = `<span class="prompt">pradeepG ~ %</span> Deploying full resume in ${countdown}...`;
+      terminalOutput.appendChild(line);
+
+      const interval = setInterval(() => {
+        countdown--;
+        if (countdown > 0) {
+          line.innerHTML = `<span class="prompt">pradeepG ~ %</span> Deploying full resume in ${countdown}...`;
+        } else {
+          clearInterval(interval);
+          line.innerHTML = `<span class="prompt">pradeepG ~ %</span> Deploying resume now...`;
+          const sections = [
+            resumeData.experience,
+            resumeData.projects,
+            resumeData.skills,
+            resumeData.education,
+            resumeData.contact
+          ];
+          let delay = 0;
+          sections.forEach(section => {
+            setTimeout(() => {
+              appendToTerminal(section);
+            }, delay);
+            delay += 1000;
+          });
+        }
+      }, 1000);
+    }
+
+    async function generatePDF() {
+      document.getElementById('pdf-content').innerHTML = getFullResume();
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('p', 'pt', 'a4');
+      await doc.html(document.getElementById('pdf-content'), {
+        callback: function (doc) {
+          doc.save('Resume.pdf');
+        },
+        margin: [20, 20, 20, 20],
+        autoPaging: 'text',
+        x: 10,
+        y: 10,
+        html2canvas: { scale: 0.5 }
+      });
+    }
+
+    commandInput.addEventListener('keypress', e => {
+      if (e.key === 'Enter') {
+        const fullCmd = commandInput.value.trim();
+        commandInput.value = '';
+        appendToTerminal(`<span class="prompt">pradeepG ~ %</span> ${fullCmd}`);
+        const { cmd, args } = parseCommand(fullCmd.toLowerCase());
+        if (cmd === 'clear') {
+          terminalOutput.innerHTML = '';
+        } else if (cmd === 'deploy') {
+          deployFullResumeAnimated();
+        } else if (cmd === 'download') {
+          commandHandlers.download();
+        } else if (commandHandlers[cmd]) {
+          const output = commandHandlers[cmd](args);
+          if (output) appendToTerminal(output);
+        } else {
+          appendToTerminal(`zsh: command not found: ${cmd}`);
+        }
+      }
+    });
+
+    deployBtn.addEventListener('click', () => {
+      appendToTerminal(`<span class="prompt">pradeepG ~ %</span> deploy`);
+      deployFullResumeAnimated();
+    });
+
+    pdfDownloadBtn.addEventListener('click', e => {
+      e.preventDefault();
+      generatePDF();
+    });
+
+    // Handle mobile devices - focus issue
+    commandInput.addEventListener('focus', function() {
+      // On mobile, scrolling may be needed when the keyboard appears
+      setTimeout(function() {
+        commandInput.scrollIntoView(false);
+      }, 300);
+    });
+
+    // Add touch tap handler for mobile
+    document.addEventListener('touchstart', function(e) {
+      // If tapping the terminal body, focus the command input
+      if (e.target.closest('.terminal-body') || e.target.closest('.command-line')) {
+        commandInput.focus();
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      appendToTerminal(`<span class="fade-in">Last login: Sun Mar 9 19:52:47 on ttys008</span>`);
+      appendToTerminal(`<span class="prompt">pradeepG ~ %</span> Welcome to Pradeep G's Terminal Portfolio`);
+      appendToTerminal(`<span class="prompt">pradeepG ~ %</span> Type 'help' to see available commands`);
+    });
+  </script>
+</body>
+</html>
