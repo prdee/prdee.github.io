@@ -10,7 +10,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     /* =====================================================================
        3 PREMIUM MASCULINE GRADIENT LIGHT THEMES (ZERO PURPLE)
@@ -68,7 +68,16 @@
       transition: background-color 0.45s ease, color 0.35s ease;
     }
     .font-syne {
-      font-family: 'Syne', 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: -0.025em;
+    }
+    .master-container {
+      width: 100%;
+      max-width: 1320px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: clamp(1.5rem, 5vw, 4.5rem);
+      padding-right: clamp(1.5rem, 5vw, 4.5rem);
     }
     .font-mono-code {
       font-family: 'JetBrains Mono', monospace;
@@ -260,6 +269,7 @@
       transform-origin: top center;
     }
     .career-timeline-dot {
+      display: none;
       position: absolute;
       left: 50%;
       width: 14px;
@@ -516,7 +526,7 @@
         </div>
 
         <!-- Center Space Reserved for the Live 3D WebGL Character -->
-        <div class="lg:col-span-4 h-[380px] sm:h-[500px] pointer-events-none"></div>
+        <div id="slot-hero-avatar" class="lg:col-span-4 h-[380px] sm:h-[460px] w-full pointer-events-none"></div>
 
         <!-- Right Side: A Tech Lead / Architect -->
         <div class="lg:col-span-4 z-10 lg:pl-10 select-none">
@@ -548,7 +558,7 @@
     <section id="about" class="relative min-h-screen w-full flex items-center px-6 sm:px-16 lg:px-24 py-28">
       <div class="w-full max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 items-center gap-12">
         <!-- Left half reserved for 3D character close-up -->
-        <div class="lg:col-span-5 hidden lg:block h-[440px]"></div>
+        <div id="slot-about-avatar" class="lg:col-span-5 h-[360px] sm:h-[440px] w-full pointer-events-none"></div>
 
         <!-- Right half: Pure Unboxed Editorial Typography -->
         <div class="lg:col-span-7 space-y-6 gsap-reveal">
@@ -577,18 +587,24 @@
     <section id="whatido" class="relative min-h-screen w-full flex items-center px-6 sm:px-16 lg:px-24 py-28">
       <div class="w-full max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 items-start gap-10">
 
-        <!-- Left Column: Giant Stacked WHAT I DO -->
-        <div class="lg:col-span-4 lg:sticky lg:top-32 gsap-reveal">
-          <h2 class="font-syne text-5xl sm:text-7xl xl:text-[5.2rem] font-extrabold uppercase leading-[0.95] tracking-tight text-slate-900">
-            WHAT<br />I <span class="accent-gradient-text">DO</span>
-          </h2>
+        <!-- Left 5 Cols: Giant WHAT I DO Heading + Dedicated 3D Workstation Desk Slot Below It -->
+        <div class="lg:col-span-5 flex flex-col justify-between space-y-6">
+          <div class="gsap-reveal">
+            <p class="text-xs sm:text-sm font-mono-code font-bold uppercase tracking-[0.28em] accent-text mb-2">
+              Capabilities &amp; Architecture
+            </p>
+            <h2 class="font-syne text-5xl sm:text-6xl xl:text-[4.5rem] font-extrabold uppercase leading-[0.95] tracking-tight text-slate-900">
+              WHAT I <span class="accent-gradient-text">DO</span>
+            </h2>
+            <p class="text-sm sm:text-base text-slate-600 mt-3 max-w-sm leading-relaxed">
+              End-to-end backend system design, low-latency live classroom infrastructure, and automated Kubernetes reliability.
+            </p>
+          </div>
+          <div id="slot-whatido-avatar" class="h-[340px] sm:h-[390px] w-full pointer-events-none"></div>
         </div>
 
-        <!-- Center Space for 3D Avatar at Dual-Monitor Desk -->
-        <div class="lg:col-span-3 hidden lg:block h-[420px]"></div>
-
-        <!-- Right Column: Two Dashed Technical Containers with Corner Ticks -->
-        <div class="lg:col-span-5 space-y-7">
+        <!-- Right 7 Cols: Two Dashed Technical Containers with Corner Ticks (Zero Overlap!) -->
+        <div class="lg:col-span-7 space-y-7">
 
           <!-- Box 1: BACKEND & DISTRIBUTED SYSTEMS -->
           <div class="what-box gsap-reveal">
@@ -693,14 +709,14 @@
           <!-- Milestone 1: TECH LEAD (NOW) -->
           <div class="relative grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 py-12 items-start pl-10 md:pl-0 gsap-reveal">
             <div class="career-timeline-dot"></div>
-            <div class="md:col-span-4 md:text-right md:pr-10">
+            <div class="md:col-span-5 md:text-right md:pr-8">
               <h3 class="text-2xl sm:text-3xl font-bold text-slate-900">Tech Lead</h3>
               <p class="accent-text text-sm sm:text-base font-medium mt-1">Infinity Learn · Bug Buster Award (May 2026)</p>
             </div>
-            <div class="md:col-span-2 md:text-center">
-              <span class="font-syne text-2xl sm:text-4xl font-extrabold text-slate-900">NOW</span>
+            <div class="md:col-span-2 flex md:justify-center items-center z-10">
+              <span class="px-4 py-1.5 rounded-full bg-white border-2 border-slate-900/20 shadow-sm font-syne text-lg sm:text-xl font-extrabold text-slate-900">NOW</span>
             </div>
-            <div class="md:col-span-6 text-slate-500 text-sm sm:text-base leading-relaxed">
+            <div class="md:col-span-5 md:pl-8 text-slate-600 text-sm sm:text-base leading-relaxed">
               Promoted to Tech Lead driving backend system architecture, Kubernetes production workloads, cross-team design reviews, and SLA/SLO observability platforms. Directed production troubleshooting and incident response across high-traffic learning products, reducing downtime by 75% and improving resolution time by 60%.
             </div>
           </div>
@@ -708,14 +724,14 @@
           <!-- Milestone 2: SENIOR SOFTWARE ENGINEER -->
           <div class="relative grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 py-12 items-start pl-10 md:pl-0 gsap-reveal">
             <div class="career-timeline-dot"></div>
-            <div class="md:col-span-4 md:text-right md:pr-10">
+            <div class="md:col-span-5 md:text-right md:pr-8">
               <h3 class="text-2xl sm:text-3xl font-bold text-slate-900">Senior Software Engineer</h3>
               <p class="accent-text text-sm sm:text-base font-medium mt-1">Infinity Learn · Bug Buster Award (2023)</p>
             </div>
-            <div class="md:col-span-2 md:text-center">
-              <span class="font-syne text-2xl sm:text-4xl font-extrabold text-slate-900">2024</span>
+            <div class="md:col-span-2 flex md:justify-center items-center z-10">
+              <span class="px-4 py-1.5 rounded-full bg-white border-2 border-slate-900/20 shadow-sm font-syne text-lg sm:text-xl font-extrabold text-slate-900">2024</span>
             </div>
-            <div class="md:col-span-6 text-slate-500 text-sm sm:text-base leading-relaxed">
+            <div class="md:col-span-5 md:pl-8 text-slate-600 text-sm sm:text-base leading-relaxed">
               Scaled B2B/B2C Live Classes and AI Mentor educational AI platforms to support 10K+ simultaneous sessions with 99.9% uptime and sub-second latency. Improved core API performance through SQL query tuning, Redis caching, and indexing—cutting average response latency from 300 ms down to 120 ms.
             </div>
           </div>
@@ -723,14 +739,14 @@
           <!-- Milestone 3: SOFTWARE ENGINEER (PERMANENT EMPLOYEE) -->
           <div class="relative grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 py-12 items-start pl-10 md:pl-0 gsap-reveal">
             <div class="career-timeline-dot"></div>
-            <div class="md:col-span-4 md:text-right md:pr-10">
+            <div class="md:col-span-5 md:text-right md:pr-8">
               <h3 class="text-2xl sm:text-3xl font-bold text-slate-900">Software Engineer</h3>
               <p class="accent-text text-sm sm:text-base font-medium mt-1">Infinity Learn · Permanent Employee</p>
             </div>
-            <div class="md:col-span-2 md:text-center">
-              <span class="font-syne text-2xl sm:text-4xl font-extrabold text-slate-900">2022</span>
+            <div class="md:col-span-2 flex md:justify-center items-center z-10">
+              <span class="px-4 py-1.5 rounded-full bg-white border-2 border-slate-900/20 shadow-sm font-syne text-lg sm:text-xl font-extrabold text-slate-900">2022</span>
             </div>
-            <div class="md:col-span-6 text-slate-500 text-sm sm:text-base leading-relaxed">
+            <div class="md:col-span-5 md:pl-8 text-slate-600 text-sm sm:text-base leading-relaxed">
               Transitioned from consultant into a permanent full-time Software Development Engineer (Backend) role. Built core backend microservices and event-driven flows with Node.js/NestJS, Python, Redis, and AWS SQS for notifications, class recordings, background jobs, and Terraform-backed Kubernetes deployments.
             </div>
           </div>
@@ -738,14 +754,14 @@
           <!-- Milestone 4: SOFTWARE CONSULTANT -->
           <div class="relative grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 py-12 items-start pl-10 md:pl-0 gsap-reveal">
             <div class="career-timeline-dot"></div>
-            <div class="md:col-span-4 md:text-right md:pr-10">
+            <div class="md:col-span-5 md:text-right md:pr-8">
               <h3 class="text-2xl sm:text-3xl font-bold text-slate-900">Software Consultant</h3>
               <p class="accent-text text-sm sm:text-base font-medium mt-1">Smart-Gig Technologies · Employee of the Year</p>
             </div>
-            <div class="md:col-span-2 md:text-center">
-              <span class="font-syne text-2xl sm:text-4xl font-extrabold text-slate-900">2021</span>
+            <div class="md:col-span-2 flex md:justify-center items-center z-10">
+              <span class="px-4 py-1.5 rounded-full bg-white border-2 border-slate-900/20 shadow-sm font-syne text-lg sm:text-xl font-extrabold text-slate-900">2021</span>
             </div>
-            <div class="md:col-span-6 text-slate-500 text-sm sm:text-base leading-relaxed">
+            <div class="md:col-span-5 md:pl-8 text-slate-600 text-sm sm:text-base leading-relaxed">
               Started my professional industry journey as a Software Consultant (Backend / Platform), building microservices with NestJS, Express.js, FastAPI, PostgreSQL, Redis, Docker, and Kubernetes for 500K+ daily transactions. Cut MTTR by 50% with CloudWatch dashboards, lowered real-time data latency by 60%, and reduced unauthorized API access by 95% via JWT/OAuth2.
             </div>
           </div>
@@ -753,14 +769,14 @@
           <!-- Milestone 5: BACHELOR'S DEGREE IN COMPUTER SCIENCE -->
           <div class="relative grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 py-12 items-start pl-10 md:pl-0 gsap-reveal">
             <div class="career-timeline-dot"></div>
-            <div class="md:col-span-4 md:text-right md:pr-10">
+            <div class="md:col-span-5 md:text-right md:pr-8">
               <h3 class="text-2xl sm:text-3xl font-bold text-slate-900">Computer Science Degree</h3>
               <p class="accent-text text-sm sm:text-base font-medium mt-1">Vijayanagara Sri Krishnadevaraya University</p>
             </div>
-            <div class="md:col-span-2 md:text-center">
-              <span class="font-syne text-2xl sm:text-4xl font-extrabold text-slate-900">2020</span>
+            <div class="md:col-span-2 flex md:justify-center items-center z-10">
+              <span class="px-4 py-1.5 rounded-full bg-white border-2 border-slate-900/20 shadow-sm font-syne text-lg sm:text-xl font-extrabold text-slate-900">2020</span>
             </div>
-            <div class="md:col-span-6 text-slate-500 text-sm sm:text-base leading-relaxed">
+            <div class="md:col-span-5 md:pl-8 text-slate-600 text-sm sm:text-base leading-relaxed">
               Graduated with a Bachelor's Degree in Computer Science (April 2020) and earned certifications in Google Cloud Infrastructure for AWS Professionals and Full Stack Web Development by Verzeo.
             </div>
           </div>
@@ -1596,14 +1612,14 @@
         deskTex.magFilter = THREE.LinearFilter;
 
         // Scaled (2.22 x 2.96 at y = -0.22) so curly hair sits well below pradeeg6@gmail.com
-        var standObj = createDeformableAvatarMesh(standTex, 2.22, 2.96, 36, 48, false);
+        var standObj = createDeformableAvatarMesh(standTex, 1.98, 2.64, 36, 48, false);
         standingMesh = standObj.mesh;
         standingGeo = standObj.geo;
         standingBasePos = standObj.base;
         standingMesh.position.set(0, -0.22, 0.15);
         rootSceneGroup.add(standingMesh);
 
-        var deskObj = createDeformableAvatarMesh(deskTex, 3.25, 2.42, 36, 36, true);
+        var deskObj = createDeformableAvatarMesh(deskTex, 2.58, 1.92, 36, 36, true);
         deskMesh = deskObj.mesh;
         deskGeo = deskObj.geo;
         deskBasePos = deskObj.base;
@@ -1731,78 +1747,104 @@
           dpos.needsUpdate = true;
         }
 
-        // Scroll-Synchronized 3D Choreography across Sections
-        var isDesktop = window.innerWidth >= 1024;
-        var targetGroupX = 0;
-        var targetGroupY = 0.0;
-        var targetGroupRotY = normX * 0.13;
-        var targetGroupRotX = -normY * 0.06;
-        var targetCamZ = 5.35;
+        // EXACT DOM-SLOT FRUSTUM LOCKING ACROSS SCROLL (Zero Text/Avatar Misalignment!)
+        function getSlotCenter(id) {
+          var el = document.getElementById(id);
+          if (!el) return { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 };
+          var r = el.getBoundingClientRect();
+          return { x: r.left + r.width * 0.5, y: r.top + r.height * 0.5 };
+        }
+
+        var vh = window.innerHeight;
+        var vw = window.innerWidth;
+        var sHero = getSlotCenter('slot-hero-avatar');
+        var sAbout = getSlotCenter('slot-about-avatar');
+        var sWhat = getSlotCenter('slot-whatido-avatar');
+        var careerEl = document.getElementById('career');
+        var careerTop = careerEl ? careerEl.getBoundingClientRect().top : vh * 2;
+
+        var vcY = vh * 0.52;
+        var targetPxX = sHero.x;
+        var targetPxY = sHero.y;
         var showDesk = false;
         var targetOpacity = 1.0;
 
-        if (currentPoseMode === 'code') {
-          showDesk = true;
-        } else if (currentPoseMode === 'wave') {
+        if (sAbout.y > vcY) {
+          var span1 = Math.max(1, sAbout.y - sHero.y);
+          var w1 = Math.min(1, Math.max(0, (vcY - sHero.y) / span1));
+          targetPxX = sHero.x + (sAbout.x - sHero.x) * w1;
+          targetPxY = sHero.y + (sAbout.y - sHero.y) * w1;
           showDesk = false;
+        } else if (sWhat.y > vcY) {
+          var span2 = Math.max(1, sWhat.y - sAbout.y);
+          var w2 = Math.min(1, Math.max(0, (vcY - sAbout.y) / span2));
+          targetPxX = sAbout.x + (sWhat.x - sAbout.x) * w2;
+          targetPxY = sAbout.y + (sWhat.y - sAbout.y) * w2;
+          showDesk = (w2 > 0.48);
         } else {
-          showDesk = (sp >= 0.34 && sp < 0.58);
+          targetPxX = sWhat.x;
+          targetPxY = sWhat.y;
+          showDesk = true;
+          // Fade out completely as #career enters so the 3D avatar NEVER floats behind Career/Work text!
+          if (careerTop < vh * 0.92) {
+            targetOpacity = Math.max(0, (careerTop - vh * 0.44) / (vh * 0.48));
+          }
         }
 
-        if (sp < 0.16) {
-          targetGroupX = 0;
-          targetGroupY = 0.0;
-          targetCamZ = 5.35;
-          targetOpacity = 1.0;
-        } else if (sp < 0.34) {
-          targetGroupX = isDesktop ? -1.35 : 0;
-          targetGroupY = -0.02;
-          targetGroupRotY = 0.18 + normX * 0.10;
-          targetCamZ = 4.90;
-          targetOpacity = isDesktop ? 1.0 : 0.28;
-        } else if (sp < 0.58) {
-          targetGroupX = isDesktop ? -0.82 : 0;
-          targetGroupY = -0.04;
-          targetGroupRotY = 0.12 + normX * 0.08;
-          targetCamZ = 5.05;
-          targetOpacity = isDesktop ? 0.98 : 0.25;
-        } else {
-          targetGroupX = 0;
-          targetGroupY = 0.12;
-          targetCamZ = 6.4;
-          targetOpacity = 0.10;
+        if (currentPoseMode === 'code') showDesk = true;
+        else if (currentPoseMode === 'wave') showDesk = false;
+
+        var clampedPxY = Math.max(vh * 0.36, Math.min(vh * 0.64, targetPxY));
+        if (careerTop < vh * 0.88) {
+          clampedPxY = targetPxY;
         }
+
+        // Convert screen pixel (targetPxX, clampedPxY) directly into Three.js camera frustum world coordinates
+        var vFov = (camera.fov * Math.PI) / 180;
+        var visibleH = 2 * Math.tan(vFov / 2) * camera.position.z;
+        var visibleW = visibleH * camera.aspect;
+
+        var worldX = ((targetPxX / vw) - 0.5) * visibleW;
+        var worldY = (0.5 - (clampedPxY / vh)) * visibleH;
 
         if (standingMesh && deskMesh) {
-          standingMesh.visible = !showDesk;
-          deskMesh.visible = showDesk;
+          var isVis = targetOpacity > 0.02;
+          standingMesh.position.set(0, 0, 0.12);
+          deskMesh.position.set(0, 0, 0.12);
+          standingMesh.visible = isVis && !showDesk;
+          deskMesh.visible = isVis && showDesk;
           standingMesh.material.opacity = targetOpacity;
           deskMesh.material.opacity = targetOpacity;
         }
         if (backdropGlowMesh) {
+          backdropGlowMesh.position.set(0, 0, -1.2);
+          backdropGlowMesh.visible = targetOpacity > 0.02;
           backdropGlowMesh.material.opacity = targetOpacity * 0.85;
         }
-
-        if (rootSceneGroup) {
-          rootSceneGroup.position.x += (targetGroupX - rootSceneGroup.position.x) * 0.07;
-          rootSceneGroup.position.y += (targetGroupY - rootSceneGroup.position.y) * 0.07;
-          if (orbitMode) {
-            rootSceneGroup.rotation.y = manualRotY;
-            rootSceneGroup.rotation.x = manualRotX;
-          } else {
-            rootSceneGroup.rotation.y += (targetGroupRotY - rootSceneGroup.rotation.y) * 0.07;
-            rootSceneGroup.rotation.x += (targetGroupRotX - rootSceneGroup.rotation.x) * 0.07;
-          }
-        }
-
         if (rimRingMesh) {
+          rimRingMesh.position.set(0, 0, -0.95);
+          rimRingMesh.visible = targetOpacity > 0.02;
+          rimRingMesh.material.opacity = targetOpacity * 0.22;
           rimRingMesh.rotation.z = t * 0.18 + sp * 2.5;
         }
         if (particlesMesh) {
           particlesMesh.rotation.y = t * 0.05 + sp * 1.2;
         }
 
-        camera.position.z += (targetCamZ - camera.position.z) * 0.06;
+        if (rootSceneGroup) {
+          rootSceneGroup.position.x += (worldX - rootSceneGroup.position.x) * 0.15;
+          rootSceneGroup.position.y += (worldY - rootSceneGroup.position.y) * 0.15;
+          var targetGroupRotY = normX * 0.11;
+          var targetGroupRotX = -normY * 0.05;
+          if (orbitMode) {
+            rootSceneGroup.rotation.y = manualRotY;
+            rootSceneGroup.rotation.x = manualRotX;
+          } else {
+            rootSceneGroup.rotation.y += (targetGroupRotY - rootSceneGroup.rotation.y) * 0.08;
+            rootSceneGroup.rotation.x += (targetGroupRotX - rootSceneGroup.rotation.x) * 0.08;
+          }
+        }
+
         camera.lookAt(0, 0.0, 0);
 
         renderer.render(scene, camera);
